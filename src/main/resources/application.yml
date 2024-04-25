@@ -1,0 +1,44 @@
+server:
+  port: 9090
+spring:
+  cloud:
+    function:
+      definition: upperCaseProcessor
+    stream:
+      bindings:
+        upperCaseProcessor-in-0:
+          destination: text-input-topic
+          binder: kstream1
+        upperCaseProcessor-out-0:
+          destination: text-uppercase-topic
+          binder: kstream2
+      binders:
+        kafka1:
+          type: kafka
+          environment:
+            spring:
+              cloud:
+                stream:
+                  kafka:
+                    binder:
+                      brokers: localhost:9092
+        kstream1:
+          type: kstream
+          environment:
+            spring:
+              cloud:
+                stream:
+                  kafka:
+                    streams:
+                      binder:
+                        brokers: localhost:9092
+        kstream2:
+          type: kstream
+          environment:
+            spring:
+              cloud:
+                stream:
+                  kafka:
+                    streams:
+                      binder:
+                        brokers: localhost:9092
